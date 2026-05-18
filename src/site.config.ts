@@ -3,21 +3,21 @@ import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } fro
 export const theme: ThemeUserConfig = {
   // [Basic]
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'Astro Theme Pure',
+  title: 'YuKino',
   /** Will be used in index page & copyright declaration */
-  author: 'Pure Lab',
+  author: 'YuKino',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'Stay hungry, stay foolish',
+  description: 'Nothing is impossible',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
-  favicon: '/favicon/favicon.ico',
+  favicon: '/favicon/Image_1778813659900_438.jpg',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
-  socialCard: '/images/social-card.png',
+  socialCard: '/favicon/Image_1778813659900_438.jpg',
   /** Specify the default language for this site. */
   locale: {
-    lang: 'en-US',
-    attrs: 'en_US',
+    lang: 'zh-CN',
+    attrs: 'zh_CN',
     // Date locale
-    dateLocale: 'en-US',
+    dateLocale: 'zh-CN',
     dateOptions: {
       day: 'numeric',
       month: 'short',
@@ -26,8 +26,8 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: '/src/assets/avatar.png',
-    alt: 'Avatar'
+    src: '/src/assets/avatar.jpg',
+    alt: 'YuKino'
   },
 
   titleDelimiter: '•',
@@ -35,22 +35,13 @@ export const theme: ThemeUserConfig = {
   npmCDN: 'https://cdn.jsdelivr.net/npm',
 
   // Still in test
-  head: [
-    /* Telegram channel */
-    // {
-    //   tag: 'meta',
-    //   attrs: { name: 'telegram:channel', content: '@cworld0_cn' },
-    //   content: ''
-    // }
-  ],
-  customCss: [],
+  head: [],
+  customCss: ['./src/assets/styles/newsprint.css'],
 
   /** Configure the header of your site. */
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
-      { title: 'Docs', link: '/docs' },
-      { title: 'Projects', link: '/projects' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
     ]
@@ -60,26 +51,18 @@ export const theme: ThemeUserConfig = {
   footer: {
     // Year format
     year: `© ${new Date().getFullYear()}`,
-    // year: `© 2019 - ${new Date().getFullYear()}`,
     links: [
-      // Registration link
-      {
-        title: 'Moe ICP 114514',
-        link: 'https://icp.gov.moe/?keyword=114514',
-        style: 'text-sm' // Uno/TW CSS class
-      },
-      // Privacy Policy link
       {
         title: 'Site Policy',
         link: '/terms',
-        pos: 2 // position set to 2 will be appended to copyright line
+        pos: 2
       }
     ],
-    /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
+    /** Enable displaying a "Astro & Pure theme powered" link in your site's footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
     social: [
-      { icon: 'github', label: 'GitHub', href: 'https://github.com/cworld1/astro-theme-pure' },
+      { icon: 'github', label: 'GitHub', href: 'https://github.com/114514kirito' },
       { icon: 'rss', label: 'RSS', href: '/rss.xml' }
     ]
   },
@@ -97,8 +80,6 @@ export const theme: ThemeUserConfig = {
     /** Share buttons to show */
     // Currently support weibo, x, bluesky
     share: ['weibo', 'x', 'bluesky']
-    /** Enable image captions (default false) */
-    // imageCaption: true
   }
 }
 
@@ -107,19 +88,13 @@ export const integ: IntegrationUserConfig = {
   // https://astro-pure.js.org/docs/integrations/links
   links: {
     // Friend logbook
-    logbook: [
-      { date: '2025-03-16', content: 'Is there a leakage?' },
-      { date: '2025-03-16', content: 'A leakage of what?' },
-      { date: '2025-03-16', content: 'I have a full seat of water, like, full of water!' },
-      { date: '2025-03-16', content: 'Must be the water.' },
-      { date: '2025-03-16', content: "Let's add that to the words of wisdom." }
-    ],
+    logbook: [],
     // Yourself link info
     applyTip: [
-      { name: 'Name', val: theme.title },
-      { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://astro-pure.js.org/' },
-      { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
+      { name: 'Name', val: 'YuKino' },
+      { name: 'Desc', val: 'Nothing is possible' },
+      { name: 'Link', val: 'https://shuijuejuesu4-web.github.io/' },
+      { name: 'Avatar', val: 'https://shuijuejuesu4-web.github.io/favicon/Image_1778813659900_438.jpg' }
     ],
     // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false
@@ -130,17 +105,9 @@ export const integ: IntegrationUserConfig = {
   // See: https://astro-pure.js.org/docs/integrations/advanced#web-content-render
   // [Quote]
   quote: {
-    // - Hitokoto
-    // https://developer.hitokoto.cn/sentence/#%E8%AF%B7%E6%B1%82%E5%9C%B0%E5%9D%80
-    // server: 'https://v1.hitokoto.cn/?c=i',
-    // target: `(data) => (data.hitokoto || 'Error')`
-    // - Quotable
-    // https://github.com/lukePeavey/quotable
-    // server: 'http://api.quotable.io/quotes/random?maxLength=60',
-    // target: `(data) => data[0].content || 'Error'`
-    // - DummyJSON
-    server: 'https://dummyjson.com/quotes/random',
-    target: `(data) => (data.quote.length > 80 ? \`\${data.quote.slice(0, 80)}...\` : data.quote || 'Error')`
+    // Hitokoto 一言 (Chinese)
+    server: 'https://v1.hitokoto.cn/?c=i',
+    target: `(data) => (data.hitokoto || 'Error')`
   },
   // [Typography]
   // https://unocss.dev/presets/typography
@@ -163,9 +130,9 @@ export const integ: IntegrationUserConfig = {
   },
   // Comment system
   waline: {
-    enable: true,
+    enable: false,
     // Server service link
-    server: 'https://astro-theme-pure-waline.arthals.ink/',
+    server: '',
     // Show meta info for comments
     showMeta: false,
     // Refer https://waline.js.org/en/guide/features/emoji.html

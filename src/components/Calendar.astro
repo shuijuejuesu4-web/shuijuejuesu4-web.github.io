@@ -1,0 +1,98 @@
+---
+---
+
+<div class="card-base p-4 rounded-2xl">
+  <div id="calendar-widget" class="w-full select-none">
+    <!-- 年月标题 -->
+    <div class="flex items-center justify-between mb-3">
+      <button id="cal-prev" class="btn-regular w-7 h-7 rounded-lg flex items-center justify-center text-sm" aria-label="上个月">&lt;</button>
+      <div id="cal-title" class="font-bold text-neutral-800 dark:text-neutral-100 text-sm"></div>
+      <button id="cal-next" class="btn-regular w-7 h-7 rounded-lg flex items-center justify-center text-sm" aria-label="下个月">&gt;</button>
+    </div>
+
+    <!-- 星期表头 -->
+    <div class="grid grid-cols-7 text-center text-xs text-neutral-400 dark:text-neutral-500 mb-2">
+      <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+    </div>
+
+    <!-- 日期网格 -->
+    <div id="cal-grid" class="grid grid-cols-7 text-center text-xs gap-1"></div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const title = document.getElementById('cal-title');
+    const grid = document.getElementById('cal-grid');
+    const prevBtn = document.getElementById('cal-prev');
+    const nextBtn = document.getElementById('cal-next');
+
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth(); // 0-based
+
+    function render() {
+      if (!title || !grid) return;
+
+      // 标题
+      title.textContent = `${currentYear} 年 ${String(currentMonth + 1).padStart(2, '0')} 月`;
+
+      // 当月第一天和最后一天
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      const startDayOfWeek = firstDay.getDay(); // 第一天是星期几 (0=日)
+      const daysInMonth = lastDay.getDate();
+
+      // 上个月的最后几天
+      const prevLastDay = new Date(currentYear, currentMonth, 0).getDate();
+
+      let html = '';
+      const totalCells = Math.ceil((startDayOfWeek + daysInMonth) / 7) * 7;
+
+      for (let i = 0; i < totalCells; i++) {
+        if (i < startDayOfWeek) {
+          // 上个月的日期
+          const d = prevLastDay - startDayOfWeek + i + 1;
+          html += `<div class="py-1 text-neutral-300 dark:text-neutral-600">${d}</div>`;
+        } else if (i - startDayOfWeek >= daysInMonth) {
+          // 下个月的日期
+          const d = i - startDayOfWeek - daysInMonth + 1;
+          html += `<div class="py-1 text-neutral-300 dark:text-neutral-600">${d}</div>`;
+        } else {
+          const d = i - startDayOfWeek + 1;
+          const isToday =
+            d === today.getDate() &&
+            currentMonth === today.getMonth() &&
+            currentYear === today.getFullYear();
+          if (isToday) {
+            html += `<div class="py-1 rounded-full bg-[var(--primary)] text-white font-bold">${d}</div>`;
+          } else {
+            html += `<div class="py-1 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 transition-colors">${d}</div>`;
+          }
+        }
+      }
+
+      grid.innerHTML = html;
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      render();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      render();
+    });
+
+    render();
+  })();
+</script>

@@ -1,8 +1,10 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
-import vercel from '@astrojs/vercel'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
+import rehypeComponents from 'rehype-components'
+import remarkDirective from 'remark-directive'
+import remarkGithubAdmonitionsToDirectives from 'remark-github-admonitions-to-directives'
 import remarkMath from 'remark-math'
 
 // Local integrations
@@ -20,12 +22,18 @@ import {
   transformerNotationHighlight,
   transformerRemoveNotationEscape
 } from './src/plugins/shiki-official/transformers.ts'
+// Custom plugins from old theme
+import { AdmonitionComponent } from './src/plugins/rehype-component-admonition.mjs'
+import { GithubCardComponent } from './src/plugins/rehype-component-github-card.mjs'
+import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.js'
+import { remarkExcerpt } from './src/plugins/remark-excerpt.js'
+import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs'
 import config from './src/site.config.ts'
 
 // https://astro.build/config
 export default defineConfig({
   // [Basic]
-  site: 'https://astro-pure.js.org',
+  site: 'https://shuijuejuesu4-web.github.io',
   // Deploy to a sub path
   // https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
   // base: '/astro-pure/',
@@ -39,12 +47,8 @@ export default defineConfig({
   },
 
   // [Adapter]
-  // https://docs.astro.build/en/guides/deploy/
-  adapter: vercel({ imageService: true }),
-  output: 'server',
-  // Local (standalone)
-  // adapter: node({ mode: 'standalone' }),
-  // output: 'server',
+  // GitHub Pages uses static output
+  output: 'static',
 
   // [Assets]
   image: {
@@ -73,10 +77,32 @@ export default defineConfig({
 
   // [Markdown]
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [
+      remarkMath,
+      remarkReadingTime,
+      remarkExcerpt,
+      remarkGithubAdmonitionsToDirectives,
+      remarkDirective,
+      // @ts-ignore Type compatibility with parseDirectiveNode
+      parseDirectiveNode
+    ],
     rehypePlugins: [
-      [rehypeKatex, {}],
+      [rehypeKatex, { strict: false }],
       rehypeHeadingIds,
+      [
+        // @ts-ignore rehype-components types
+        rehypeComponents,
+        {
+          components: {
+            github: GithubCardComponent,
+            note: (x: any, y: any) => AdmonitionComponent(x, y, 'note'),
+            tip: (x: any, y: any) => AdmonitionComponent(x, y, 'tip'),
+            important: (x: any, y: any) => AdmonitionComponent(x, y, 'important'),
+            caution: (x: any, y: any) => AdmonitionComponent(x, y, 'caution'),
+            warning: (x: any, y: any) => AdmonitionComponent(x, y, 'warning')
+          }
+        }
+      ],
       [
         rehypeAutolinkHeadings,
         {
