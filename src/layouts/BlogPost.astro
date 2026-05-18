@@ -7,6 +7,7 @@ import 'katex/dist/katex.min.css'
 
 import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Copyright, Hero } from 'astro-pure/components/pages'
+import { Button } from 'astro-pure/user'
 import config from 'virtual:config'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { Comment, PageInfo } from '@/components/waline'
@@ -46,11 +47,12 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
 <PageLayout
   meta={{ articleDate, description, ogImage: socialImage, title }}
   highlightColor={primaryColor}
-  back='/blog'
 >
+  <Button title='Back' href='/blog' variant='back' />
+
   <main class='mx-auto mt-6 w-full'>
     <article class='mx-auto max-w-4xl'>
-      <Hero {data} {remarkPluginFrontmatter} slot='header'>
+      <Hero {data} {remarkPluginFrontmatter}>
         <Fragment slot='description'>
           {!isDraft && enableComment && <PageInfo comment class='mt-1' />}
         </Fragment>
